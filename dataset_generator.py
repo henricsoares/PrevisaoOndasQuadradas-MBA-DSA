@@ -10,33 +10,46 @@ num_coords = int(input("Digite o número de subconjuntos: "))
 num_points = 128
 
 # Defina os intervalos para os subsets
-ranges1 = [
-    [
-        x_min,
-        np.random.uniform(0.25, 0.35) * x_max,
-        y_min,
-        np.random.uniform(0.15, 0.25) * y_max,
-    ]
-    for _ in range(num_coords)
-]
-x_range1_min, x_range1_max = x_min, 0.3 * x_max
-y_range1_min, y_range1_max = y_min, 0.2 * y_max
+def gen_ranges(x_min, x_max, y_min, y_max):
 
-ranges2 = [
-    [
-        xy[1],
-        np.random.uniform(0.55, 0.65) * x_max,
-        y_min,
-        np.random.uniform(0.75, 0.85) * y_max,
-    ]
-    for xy in ranges1
-]
-x_range2_min, x_range2_max = 0.29 * x_max, 0.6 * x_max
-y_range2_min, y_range2_max = y_min, 0.8 * y_max
+    width = np.random.uniform(.33 * x_max, .42 * x_max)
+    height = np.random.uniform(.62 * y_max, .87 * y_max)
+    location = np.random.uniform(.1 * x_max, (.9 * x_max) - width)
 
-ranges3 = [
-    [xy[1], x_max, y_min, np.random.uniform(0.15, 0.25) * y_max] for xy in ranges2
-]
+    centerRange = [
+            location,
+            location + width,
+            y_min,
+            height,
+        ]
+
+
+    leftRange = [
+            x_min,
+            location * .99,
+            y_min,
+            np.random.uniform(0.15, 0.25) * y_max,
+        ]
+
+
+
+    rightRange = [
+        location + width * 1.01,
+        x_max,
+        y_min,
+        np.random.uniform(0.15, 0.25) * y_max
+    ]
+
+    return (leftRange, centerRange, rightRange)
+
+ranges1, ranges2, ranges3 = [], [], []
+
+for _ in range(num_coords):
+    lr, cr, rr = (gen_ranges(x_min, x_max, y_min, y_max))
+    ranges1.append(lr)
+    ranges2.append(cr)
+    ranges3.append(rr)
+
 x_range3_min, x_range3_max = 0.61 * x_max, x_max
 y_range3_min, y_range3_max = y_min, 0.2 * y_max
 
